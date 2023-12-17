@@ -1,0 +1,174 @@
+﻿@{
+    ViewBag.Title = "ShowUser";
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+    var userList = (IEnumerable<user>)ViewData["UserList"];
+}
+
+<style>
+    /* Styles for the modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<h2>Show User</h2>
+
+<table border="1">
+    @foreach (var item in userList)
+    {
+        var rolename = "";
+        if (item.roleId == 1)
+        {
+            rolename = "admin";
+        }
+        else if (item.roleId == 2)
+        {
+            rolename = "user";
+        }
+        <tr>
+            <td style="padding: 20px; display: none;">@item.userId</td>
+            <td style="padding: 20px;">@item.firstName</td>
+            <td style="padding: 20px;">@item.lastName</td>
+            <td style="padding: 20px;">@item.gender</td>
+            <td style="padding: 20px;">@item.email</td>
+            <td style="padding: 20px;">@item.password</td>
+            <td style="padding: 20px;">@rolename</td>
+            <td style="padding: 20px;">@item.status</td>
+            <td style="padding: 20px;">
+                <button style="margin-right: 10px;" class="editModalBtn" data-userid="@item.userId">Edit</button>
+                <button class="deleteBtn" data-userid="@item.userId">Delete</button>
+            </td>
+        </tr>
+
+        <div id="myModal-@item.userId" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('@item.userId')">&times;</span>
+                <form id="form-@item.userId">
+                    <input type="hidden" name="userId" value="@item.userId" />
+                    <div class="form-group">
+                        <label for="role-@item.userId">Role</label>
+                        <input type="text" class="form-control" id="role-@item.userId" placeholder="Enter new role" name="roleId" value="@item.roleId" />
+                    </div>
+                    <div class="form-group">
+                        <label for="status-@item.userId">Status</label>
+                        <input type="text" class="form-control" id="status-@item.userId" placeholder="Enter new status" name="status" value="@item.status" />
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="submitForm('@item.userId')">Edit</button>
+                </form>
+            </div>
+        </div>
+    }
+</table>
+
+<script>
+    var modal = null;
+
+    function openModal(userId) {
+        modal = document.getElementById('myModal-' + userId);
+        modal.style.display = 'block';
+    }
+
+    function closeModal(userId) {
+        modal.style.display = 'none';
+    }
+
+    function submitForm(userId) {
+        var form = document.getElementById('form-' + userId);
+        var formData = new FormData(form);
+
+        fetch('/Home/EditUser', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Add this header for AJAX requests
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Log the response from the server
+
+                if (data.success) {
+                    closeModal(userId);
+                    // Optionally, you can handle success or display a message to the user
+                } else {
+                    // Handle the case where the server returns an error
+                    console.error('Server error:', data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    var editModalBtns = document.getElementsByClassName('editModalBtn');
+    for (var i = 0; i < editModalBtns.length; i++) {
+        editModalBtns[i].addEventListener('click', function () {
+            var userId = this.getAttribute('data-userid');
+            openModal(userId);
+        });
+    }
+
+    var deleteBtns = document.getElementsByClassName('deleteBtn');
+    for (var i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].addEventListener('click', function () {
+            var userId = this.getAttribute('data-userid');
+            deleteUser(userId);
+        });
+    }
+
+    function deleteUser(userId) {
+        if (confirm("Are you sure you want to delete this user?")) {
+            fetch(`/Home/DeleteUser/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Add this header for AJAX requests
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Log the response from the server
+
+                    if (data.success) {
+                        // Reload the page to update the user list
+                        location.reload();
+                    } else {
+                        // Handle the case where the server returns an error
+                        console.error('Server error:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    });
+</script>

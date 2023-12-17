@@ -1,0 +1,309 @@
+﻿
+@{
+    ViewBag.Title = "AdminProfile";
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+}
+
+<style>
+    /* Styles for the modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 7% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt="" />
+                    <div class="file btn btn-lg btn-primary">
+                        COMING SOON
+                        <input type="file" name="file" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h3>
+                        @Model.firstName @Model.lastName
+                    </h3>
+                    <h6>
+                        Job Here - COMING SOON
+                    </h6>
+                    @*<p class="proile-rating">RANKINGS : <span>8/10</span></p>*@
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button id="editModalBtn" type="button" class="profile-edit-btn" name="btnAddMore" value="Edit Profile">Edit Profile</button>
+            </div>
+        </div>
+        <div class="row">
+            @*<div class="col-md-4">
+                    <div class="profile-work">
+                        <p>WORK LINK</p>
+                        <a href="">Website Link</a><br />
+                        <a href="">Bootsnipp Profile</a><br />
+                        <a href="">Bootply Profile</a>
+                        <p>SKILLS</p>
+                        <a href="">Web Designer</a><br />
+                        <a href="">Web Developer</a><br />
+                        <a href="">WordPress</a><br />
+                        <a href="">WooCommerce</a><br />
+                        <a href="">PHP, .Net</a><br />
+                    </div>
+                </div>*@
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Firstname</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.firstName</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Lastname</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.lastName</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gender</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.gender</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.email</p>
+                            </div>
+                        </div>
+                        @*<div class="row">
+                                <div class="col-md-6">
+                                    <label>Password</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p type="password">@Model.password</p>
+                                </div>
+                            </div>*@
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <h1>COMING SOON</h1>
+                        @*<div class="row">
+                                <div class="col-md-6">
+                                    <label>Experience</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>Expert</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Hourly Rate</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>10$/hr</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Total Projects</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>230</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>English Level</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>Expert</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Availability</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>6 months</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Your Bio</label><br />
+                                    <p>Your detail description</p>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+
+    <div class="modal-content">
+        <span class="close" id="closeModalBtn">&times;</span>
+        <p>This is a simple modal!</p>
+        <form id="editForm">
+            <input type="hidden" name="userId" value="@Model.userId">
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter first name" name="firstname">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="Enter last name" name="lastname">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <input type="text" class="form-control" id="gender" aria-describedby="emailHelp" placeholder="Enter gender" name="gender">
+            </div>
+            <div class="form-group">
+                <label for="oldpassword">Old Password</label>
+                <input type="password" class="form-control" id="oldpassword" placeholder="Enter old password" name="oldpassword">
+                <div id="oldpassword-validation-message" class="validation-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="newpassword">New Password</label>
+                <input type="password" class="form-control" id="newpassword" placeholder="Enter new password" name="newpassword">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    // Get the modal and the button that opens it
+    var modal = document.getElementById('myModal');
+    var openModalBtn = document.getElementById('editModalBtn');
+    var closeModalBtn = document.getElementById('closeModalBtn');
+
+    // Function to open the modal
+    function openModal() {
+        modal.style.display = 'block';
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    // Function to handle form submission
+    var form = document.getElementById('editForm');
+    form.addEventListener('submit', submitForm);
+
+    // Function to handle form submission
+    // Function to handle form submission
+    function submitForm(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Clear previous error messages
+        var oldpasswordValidationMessage = document.getElementById("oldpassword-validation-message");
+        oldpasswordValidationMessage.textContent = "";
+
+        // Get the form data
+        var formData = new FormData(event.target);
+
+        // Make an AJAX request to the server to update the user's information
+        fetch('/Home/EditProfile', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update was successful
+                    console.log('Information updated successfully');
+                    closeModal(); // Close the modal after successful submission
+                    alert('Information updated successfully'); // Display an alert
+
+                    // Reset the form fields
+                    event.target.reset();
+                } else {
+                    // Update failed, display the error message
+                    console.error(data.error);
+                    if (data.error === "Incorrect old password") {
+                        oldpasswordValidationMessage.textContent = data.error; // Display the error message
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+    }
+
+    // Event listeners for opening and closing the modal
+    openModalBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+
+    // Event listener for form submission
+    form.addEventListener('submit', submitForm);
+
+    // Close the modal if the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    });
+
+</script>
+

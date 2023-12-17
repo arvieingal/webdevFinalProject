@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/indexLayout.cshtml";
+}
+
+<center>
+    <h2>Register</h2>
+    <form method="post">
+        <div class="form-group">
+            <label for="firstname">First Name</label>
+            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="firstname">
+        </div>
+        <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="lastname">
+        </div>
+        <p>Select your Gender:</p>
+        <input type="radio" id="male" name="gender" value="Male">
+        <label for="male">Male</label><br>
+        <input type="radio" id="female" name="gender" value="Female">
+        <label for="female">Female</label><br>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" onblur="checkEmailAvailability()">
+            <div id="email-validation-message"></div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br />
+    <a href="@Url.Action("Login", "Home")">Already have an account?</a>
+</center>
+
+
+<script>
+    function checkEmailAvailability() {
+        var email = document.getElementById("email").value;
+        var messageDiv = document.getElementById("email-validation-message");
+        var submitButton = document.getElementById("submit-button");
+
+        // Make AJAX request
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "@Url.Action("CheckEmailAvailability", "Home")", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = xhr.responseText;
+                messageDiv.innerHTML = response;
+
+                // Disable submit button if email is not available
+                if (response.indexOf("available") === -1) {
+                    submitButton.disabled = true;
+                } else {
+                    submitButton.disabled = false;
+                }
+            }
+        };
+        xhr.send("email=" + email);
+    }
+</script>
